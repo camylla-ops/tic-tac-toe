@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <!-- Configuração básica do documento -->
+  <meta charset="UTF-8">
+  <!-- Meta tag para responsividade -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogo da Velha</title>
+  
+  <!-- Carrega fonte Pixelify Sans do Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Estilos gerais da página */
+    body {
+      text-align: center;
+      background: #ffe6f2; /* Cor de fundo rosa claro */
+      font-family: 'Pixelify Sans', cursive; /* Fonte personalizada */
+      padding: 20px;
+      margin: 0;
+    }
+
+    /* Estilo do título principal */
+    h1 {
+      font-size: 42px;
+      color: #ff69b4; /* Rosa médio */
+      text-shadow: 2px 2px 0px #fff; /* Sombra branca para efeito 3D */
+      margin-bottom: 30px;
+    }
+
+    /* Container do tabuleiro do jogo */
+    #container {
+      width: 90%;
+      max-width: 300px; /* Garante o tamanho ideal em telas maiores */
+      margin: 20px auto; /* Centraliza horizontalmente */
+      display: flex;
+      flex-wrap: wrap; /* Quebra linhas automaticamente */
+      border: 4px solid #ff69b4;
+      background: #fff;
+      box-shadow: 0 0 20px rgba(255,105,180,0.3); /* Sombra rosa suave */
+    }
+
+    /* Estilo individual de cada célula do jogo */
+    .box {
+      height: 100px; /* Tamanho fixo das células */
+      border: 3px solid #ff69b4;
+      box-sizing: border-box; /* Mantém dimensões incluindo bordas */
+      flex: 1 1 33%; /* 3 colunas por linha */
+      position: relative; /* Para posicionamento absoluto dos símbolos */
+      background: repeating-linear-gradient( /* Fundo com gradiente listrado */
+        45deg,
+        #fff0f6,
+        #fff0f6 2px,
+        #ffe6f2 2px,
+        #ffe6f2 4px
+      );
+      cursor: pointer; /* Indica elemento clicável */
+    }
+
+    /* Remove bordas externas do tabuleiro */
+    #block-1, #block-2, #block-3 { border-top: none; }
+    #block-1, #block-4, #block-7 { border-left: none; }
+    #block-3, #block-6, #block-9 { border-right: none; }
+    #block-7, #block-8, #block-9 { border-bottom: none; }
+
+    /* Estilização do jogador X (Flor) */
+    .x::before {
+      content: '🌸'; /* Emoji de flor */
+      font-size: 50px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%); /* Centraliza o símbolo */
+    }
+
+    /* Estilização do jogador O (Coração) */
+    .o::before {
+      content: '❤️'; /* Emoji de coração */
+      font-size: 45px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Estilo dos botões de modo de jogo */
+    #buttons-container button {
+      border: none;
+      padding: 12px 25px;
+      margin: 0 10px;
+      font-family: 'Pixelify Sans', cursive;
+      font-size: 18px;
+      background: #ff69b4; /* Cor de fundo rosa */
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s; /* Suaviza animações */
+      border: 2px solid #ff1493; /* Borda mais escura */
+      box-shadow: 0 4px 0 #ff1493; /* Efeito 3D */
+    }
+
+    /* Efeito hover nos botões */
+    #buttons-container button:hover {
+      background: #ff85c1; /* Rosa mais claro */
+      transform: translateY(2px); /* Movimento para baixo */
+      box-shadow: 0 2px 0 #ff1493; /* Ajusta sombra */
+    }
+
+    /* Container do placar */
+    #scoreboard-container {
+      margin: 25px auto;
+      padding: 15px;
+      background: #fff;
+      border: 3px solid #ff69b4;
+      border-radius: 10px;
+      max-width: 300px;
+    }
+
+    /* Estilo individual dos elementos do placar */
+    .score-box {
+      display: inline-block;
+      margin: 0 15px;
+      font-size: 24px;
+      color: #ff69b4;
+    }
+
+    /* Estilo da mensagem de vitória/empate */
+    #message p {
+      position: fixed; /* Sobrepõe o conteúdo */
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #ff69b4;
+      color: white;
+      padding: 20px 40px;
+      border-radius: 15px;
+      font-size: 32px;
+      box-shadow: 0 0 20px rgba(255,105,180,0.5); /* Efeito de brilho */
+      border: 3px solid #ff1493;
+    }
+
+    /* Classe utilitária para esconder elementos */
+    .hide { display: none !important; }
+
+    /* Responsividade: ajustes para telas menores */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 32px;
+        margin-bottom: 20px;
+      }
+      
+      .box {
+        height: 80px; /* Reduz um pouco o tamanho das células */
+      }
+      
+      #buttons-container button {
+        font-size: 16px;
+        padding: 10px 20px;
+        margin: 5px;
+      }
+      
+      #message p {
+        font-size: 24px;
+        padding: 15px 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Jogo da Velha💗</h1>
+  
+  <!-- Seção de seleção de modo de jogo -->
+  <div id="buttons-container">
+    <button id="2-players">2 Jogadores</button>
+    <button id="ai-player">Contra IA</button>
+  </div>
+  
+  <!-- Tabuleiro do jogo (9 células) -->
+  <div id="container" class="hide">
+    <div class="box" id="block-1"></div>
+    <div class="box" id="block-2"></div>
+    <div class="box" id="block-3"></div>
+    <div class="box" id="block-4"></div>
+    <div class="box" id="block-5"></div>
+    <div class="box" id="block-6"></div>
+    <div class="box" id="block-7"></div>
+    <div class="box" id="block-8"></div>
+    <div class="box" id="block-9"></div>
+  </div>
+
+  <!-- Placar -->
+  <div id="scoreboard-container">
+    <h2>Placar:</h2>
+    <span class="score-box"><span id="x-scoreboard">🌸</span>: <span id="scoreboard-1">0</span></span>
+    <span class="score-box"><span id="o-scoreboard">❤️</span>: <span id="scoreboard-2">0</span></span>
+  </div>
+
+  <!-- Mensagem de resultado (escondida inicialmente) -->
+  <div id="message" class="hide">
+    <p></p>
+  </div>
+
+  <script>
+    // Variáveis de estado do jogo
+    let isAgainstAI = false; // Modo de jogo (true = vs IA)
+    let currentPlayer = '🌸'; // Jogador atual
+    let gameBoard = Array(9).fill(''); // Representação lógica do tabuleiro
+    const winConditions = [ // Combinações vencedoras
+      [0,1,2], [3,4,5], [6,7,8], // Linhas
+      [0,3,6], [1,4,7], [2,5,8], // Colunas
+      [0,4,8], [2,4,6] // Diagonais
+    ];
+
+    // Configura eventos nos botões de modo de jogo
+    document.querySelectorAll('#buttons-container button').forEach(button => {
+      button.addEventListener('click', () => {
+        isAgainstAI = button.id === 'ai-player'; // Ativa modo IA se necessário
+        document.getElementById('buttons-container').classList.add('hide');
+        document.getElementById('container').classList.remove('hide');
+        resetGame();
+      });
+    });
+
+    // Adiciona eventos de clique nas células
+    document.querySelectorAll('.box').forEach((box, index) => {
+      box.addEventListener('click', () => handleMove(box, index));
+    });
+
+    // Processa a jogada do usuário
+    function handleMove(box, index) {
+      if (!box.innerHTML && !checkWinner()) { // Só executa se célula vazia e jogo ativo
+        box.innerHTML = `<div class="${currentPlayer === '🌸' ? 'x' : 'o'}"></div>`;
+        gameBoard[index] = currentPlayer; // Atualiza tabuleiro lógico
+        
+        if (!checkWinner()) { // Verifica se houve vitória
+          currentPlayer = currentPlayer === '🌸' ? '❤️' : '🌸'; // Troca jogador
+          if (isAgainstAI && currentPlayer === '❤️') { // Se for vez da IA
+            setTimeout(aiMove, 500); // IA joga após 0.5s
+          }
+        }
+      }
+    }
+
+    // Lógica da IA (movimentos aleatórios)
+    function aiMove() {
+      const emptyCells = gameBoard
+        .map((cell, index) => cell === '' ? index : null)
+        .filter(cell => cell !== null); // Lista células vazias
+      
+      if (emptyCells.length > 0) {
+        const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+        const box = document.querySelectorAll('.box')[randomIndex];
+        handleMove(box, randomIndex); // Executa jogada aleatória
+      }
+    }
+
+    // Verifica condições de vitória/empate
+    function checkWinner() {
+      for (const condition of winConditions) {
+        const [a, b, c] = condition;
+        if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+          showWinner(gameBoard[a]); // Mostra vencedor
+          return true;
+        }
+      }
+
+      if (!gameBoard.includes('')) { // Verifica empate
+        showWinner('draw');
+        return true;
+      }
+      return false;
+    }
+
+    // Exibe mensagem de resultado
+    function showWinner(winner) {
+      const message = document.querySelector('#message p');
+      if (winner === 'draw') {
+        message.textContent = "😻 Deu Velha!";
+      } else {
+        message.textContent = `${winner} Venceu!`;
+        updateScore(winner); // Atualiza placar
+      }
+      document.getElementById('message').classList.remove('hide');
+      setTimeout(resetGame, 2000); // Reinicia após 2 segundos
+    }
+
+    // Atualiza o placar
+    function updateScore(winner) {
+      const scoreId = winner === '🌸' ? 'scoreboard-1' : 'scoreboard-2';
+      const scoreElement = document.getElementById(scoreId);
+      scoreElement.textContent = parseInt(scoreElement.textContent) + 1;
+    }
+
+    // Reinicia o jogo
+    function resetGame() {
+      gameBoard = Array(9).fill(''); // Limpa tabuleiro lógico
+      currentPlayer = '🌸'; // Reseta para primeiro jogador
+      document.querySelectorAll('.box').forEach(box => box.innerHTML = ''); // Limpa células visuais
+      document.getElementById('message').classList.add('hide'); // Esconde mensagem
+    }
+  </script>
+</body>
+</html>
