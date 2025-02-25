@@ -4,9 +4,9 @@
 [![Licença](https://img.shields.io/badge/licença-MIT-blue)](https://opensource.org/licenses/MIT)
 [![Demo](https://img.shields.io/badge/demo-GitHub%20Pages-blue)](https://camylla-ops.github.io/jogodavelha)
 
-Um clássico jogo da velha com design moderno e elementos interativos, desenvolvido com HTML, CSS e JavaScript.
+ Jogo da velha com design moderno, desenvolvido com HTML, CSS e JavaScript.
 
-![Preview do Jogo](screenshot.png) <!-- Adicione uma screenshot real posteriormente -->
+![Preview do Jogo](screenshot.png) 
 
 ## ✨ Funcionalidades Atuais
 - **Modos de Jogo:**
