@@ -1,4 +1,4 @@
-# 🎮 Jogo da Velha Estilizado
+# 🎮 Jogo da Velha 
 
 [![Status do Projeto](https://img.shields.io/badge/status-em%20desenvolvimento-yellowgreen)](https://github.com/camylla-ops/jogodavelha)
 [![Licença](https://img.shields.io/badge/licença-MIT-blue)](https://opensource.org/licenses/MIT)
