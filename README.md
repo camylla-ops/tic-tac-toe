@@ -4,7 +4,7 @@
 [![Licença](https://img.shields.io/badge/licença-MIT-blue)](https://opensource.org/licenses/MIT)
 [![Demo](https://img.shields.io/badge/demo-GitHub%20Pages-blue)](https://camylla-ops.github.io/jogodavelha)
 
- Jogo da velha com design moderno, desenvolvido com HTML, CSS e JavaScript.
+ Jogo da velha, desenvolvido com HTML, CSS e JavaScript.
 
 ![Preview do Jogo](screenshot.png) 
 
