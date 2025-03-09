@@ -37,20 +37,3 @@
   - JavaScript vanilla
 
 
-
-## 🤝 Contribuições
-Contribuições são bem-vindas! Este projeto está em **ativo desenvolvimento** e aceito sugestões:
-- Reporte bugs [aqui](https://github.com/camylla-ops/jogodavelha/issues)
-- Sugira novas funcionalidades
-- Envie pull requests para:
-  - Melhorias de código
-  - Novos modos de jogo
-  - Otimizações de performance
-
-## 📌 Próximos Passos
-```bash
-
-- [ ] Adicionar sons e música ambiente
-- [ ] Implementar IA avançada
-- [ ] Criar sistema de temas customizáveis
-
